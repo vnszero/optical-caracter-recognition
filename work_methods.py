@@ -73,8 +73,6 @@ def parameters_graph(trials_fold) -> None:
     hip.Experiment.from_iterable(data).display(force_full_width=True)
 
 def info_gain_matrix_recover(info_gain_database:pd.DataFrame, square_reference:int) -> list:
-    # Defina o tamanho desejado da matriz
-    square_reference = 28
 
     # Start
     info_gain_matrix_index = 0
