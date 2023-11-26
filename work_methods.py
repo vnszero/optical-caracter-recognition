@@ -71,3 +71,28 @@ def parameters_graph(trials_fold) -> None:
     # build a graph for passed trials fold parameters swap
     data = [{**trial.params, 'loss': trial.value} for trial in trials_fold]
     hip.Experiment.from_iterable(data).display(force_full_width=True)
+
+def info_gain_matrix_recover(info_gain_database:pd.DataFrame, square_reference:int) -> list:
+    # Defina o tamanho desejado da matriz
+    square_reference = 28
+
+    # Start
+    info_gain_matrix_index = 0
+    info_gain_matrix = []
+    info_gain_matrix.append([])
+
+    # Pass through the DataFrame's rows and fill matrix with values calculated
+    line_breaker = 0
+    for index, row in info_gain_database.iterrows():
+        for item in row:
+            if not('pixel' in str(item)):
+                if info_gain_matrix_index < square_reference:
+                    info_gain_matrix[info_gain_matrix_index].append(item)
+                    line_breaker += 1
+                    if (line_breaker % square_reference == 0):
+                        info_gain_matrix_index += 1
+                        if info_gain_matrix_index < square_reference:
+                            info_gain_matrix.append([])
+                        line_breaker = 0
+    
+    return info_gain_matrix
