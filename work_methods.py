@@ -95,10 +95,10 @@ def info_gain_matrix_recover(info_gain_database:pd.DataFrame, square_reference:i
     
     return info_gain_matrix
 
-def create_filter_array(square_reference:int, start_rows:int, start_columns:int, last_rows:int, last_columns:int) -> list:
+def create_filter_array(square_reference:int, start_row:int, start_column:int, last_row:int, last_column:int) -> list:
     filtr = np.zeros((28,28))
-    for i in range(start_rows, last_rows):
-        for j in range(start_columns, last_columns):
+    for i in range(start_row, last_row):
+        for j in range(start_column, last_column):
             filtr[i][j] = 1
 
     filtr_array = []
