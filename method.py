@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from results import Results
+from results import Result
 import pandas as pd
 from sklearn.base import ClassifierMixin, RegressorMixin
 from typing import List,Union
@@ -7,7 +7,7 @@ from typing import List,Union
 class MachineLearningMethod:
 
     @abstractmethod
-    def eval(self,df_practice:pd.DataFrame, df_data_to_predict:pd.DataFrame, col_category:str) -> Results:
+    def eval(self,df_practice:pd.DataFrame, df_data_to_predict:pd.DataFrame, col_category:str) -> Result:
         raise NotImplementedError
 
 class ScikitLearnMachineLearning(MachineLearningMethod):
@@ -16,7 +16,7 @@ class ScikitLearnMachineLearning(MachineLearningMethod):
     def __init__(self,ml_method:Union[ClassifierMixin,RegressorMixin]):
         self.ml_method = ml_method
 
-    def eval(self, df_practice:pd.DataFrame, df_data_to_predict:pd.DataFrame, col_category:str, seed:int=1) -> Results:
+    def eval(self, df_practice:pd.DataFrame, df_data_to_predict:pd.DataFrame, col_category:str, seed:int=1) -> Result:
         # from df_practice, split features from category
         # x_practice holds features
         # y_practice holds category value
@@ -31,4 +31,4 @@ class ScikitLearnMachineLearning(MachineLearningMethod):
 
         # return results
         y_predictions = model.predict(x_to_predict)
-        return Results(y_to_predict,y_predictions)
+        return Result(y_to_predict,y_predictions)

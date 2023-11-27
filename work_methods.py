@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import hiplot as hip
-from avaliacao import Experimento
+from evaluation import Experiment
 
 def matrix_recover(all_data:pd.DataFrame, to_show:int, square_reference:int) -> list:
     line_breaker = 0
@@ -40,29 +40,29 @@ def matrix_recover(all_data:pd.DataFrame, to_show:int, square_reference:int) -> 
 
     return matrix
 
-def show_results(name:str, numbers:dict, exp:Experimento) -> None:
+def show_results(name:str, numbers:dict, exp:Experiment) -> None:
     print(name)
-    for resultado in exp.resultados:
-        print("Macro f1: " + str(resultado.macro_f1))
-        print("\nAcuracia: " + str(resultado.acuracia))
-        print("\nf1 por classe: ")
-        for key in resultado.f1_por_classe.keys():
-            print('\t{} -> {}'.format(numbers[key], resultado.f1_por_classe[key]))
-        print("\nprecisao: ")
-        for key in resultado.precisao.keys():
-            print('\t{} -> {}'.format(numbers[key], resultado.precisao[key]))
-        print("\nrevocacao: ")
-        for key in resultado.revocacao.keys():
-            print('\t{} -> {}'.format(numbers[key], resultado.revocacao[key]))
-        print('\nMatriz de confusao: ')
+    for result in exp.results:
+        print("Macro f1: " + str(result.macro_f1))
+        print("\nAccuracy: " + str(result.accuracy))
+        print("\nf1 per category: ")
+        for key in result.f1_per_category.keys():
+            print('\t{} -> {}'.format(numbers[key], result.f1_per_category[key]))
+        print("\nprecision: ")
+        for key in result.precision.keys():
+            print('\t{} -> {}'.format(numbers[key], result.precision[key]))
+        print("\nrecall: ")
+        for key in result.recall.keys():
+            print('\t{} -> {}'.format(numbers[key], result.recall[key]))
+        print('\nConfusion Matrix: ')
         print("\t", end='')
         for names in numbers.values():
             print(names[:2]+"\t", end='')
         print()
-        for i in resultado.mat_confusao:
+        for i in result.confusion_matrix:
             print(numbers[i][0:2]+"\t", end='')
-            for j in resultado.mat_confusao[i]:
-                print(str(resultado.mat_confusao[i][j])+"\t", end='')
+            for j in result.confusion_matrix[i]:
+                print(str(result.confusion_matrix[i][j])+"\t", end='')
             print()
         print('\n')
         print('===================================================================\n')
