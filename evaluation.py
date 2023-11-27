@@ -110,8 +110,8 @@ class GoalOptimizationRandomForest(GoalOptimization):
     def get_method(self,trial: optuna.Trial)->MachineLearningMethod:        
         min_samples = trial.suggest_uniform('min_samples_split', 0, 0.5)
         max_features = trial.suggest_uniform('max_features', 0, 0.5)
-        num_arvores = trial.suggest_int('num_arvores', 1, self.num_max_trees)
-        clf_rf = RandomForestClassifier(min_samples_split=min_samples,max_features=max_features,n_estimators=num_arvores,random_state=2)
+        num_trees = trial.suggest_int('num_trees', 1, self.num_max_trees)
+        clf_rf = RandomForestClassifier(min_samples_split=min_samples,max_features=max_features,n_estimators=num_trees,random_state=2)
         
         return ScikitLearnMachineLearning(clf_rf)
 
