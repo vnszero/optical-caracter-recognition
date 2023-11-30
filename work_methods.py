@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import hiplot as hip
 from evaluation import Experiment
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def matrix_recover(all_data:pd.DataFrame, to_show:int, square_reference:int) -> list:
     line_breaker = 0
@@ -40,31 +42,40 @@ def matrix_recover(all_data:pd.DataFrame, to_show:int, square_reference:int) -> 
 
     return matrix
 
+def plot_metric(metric_scores, metric_name, color):
+    plt.figure(figsize=(10, 6))
+    bars = plt.bar(metric_scores.keys(), metric_scores.values(), color=color)
+    plt.xlabel('Categoria')
+    plt.ylabel(metric_name)
+    plt.title(f'{metric_name} por Categoria')
+
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval, round(yval, 3), ha='center', va='bottom')
+
+    plt.xticks(list(metric_scores.keys()))  
+    plt.show()
+
 def show_results(name:str, numbers:dict, exp:Experiment) -> None:
     print(name)
+    categories = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     for result in exp.results:
-        print("Macro f1: " + str(result.macro_f1))
-        print("\nAccuracy: " + str(result.accuracy))
-        print("\nf1 per category: ")
-        for key in result.f1_per_category.keys():
-            print('\t{} -> {}'.format(numbers[key], result.f1_per_category[key]))
-        print("\nprecision: ")
-        for key in result.precision.keys():
-            print('\t{} -> {}'.format(numbers[key], result.precision[key]))
-        print("\nrecall: ")
-        for key in result.recall.keys():
-            print('\t{} -> {}'.format(numbers[key], result.recall[key]))
-        print('\nConfusion Matrix: ')
-        print("\t", end='')
-        for names in numbers.values():
-            print(names[:2]+"\t", end='')
-        print()
-        for i in result.confusion_matrix:
-            print(numbers[i][0:2]+"\t", end='')
-            for j in result.confusion_matrix[i]:
-                print(str(result.confusion_matrix[i][j])+"\t", end='')
-            print()
-        print('\n')
+        print("Macro f1: " + str(result.macro_f1) + "\n")
+        print("Accuracy: " + str(result.accuracy) + "\n")
+
+        plot_metric(result.f1_per_category, 'F1 per category', color='blue')
+        plot_metric(result.precision, 'Precision', color='green')
+        plot_metric(result.recall, 'Recall',color='orange')
+        
+        df_confusion_matrix = pd.DataFrame(result.confusion_matrix, index=categories, columns=categories)
+
+        plt.figure(figsize=(10, 10))
+        sns.heatmap(df_confusion_matrix, annot=True, fmt="d", cmap="Blues", linewidths=.5)
+        plt.title('Matriz de Confusão')
+        plt.xlabel('Valor Real')
+        plt.ylabel('Valor Previsto')
+        plt.show()
+        
         print('===================================================================\n')
     
 def parameters_graph(trials_fold) -> None:
